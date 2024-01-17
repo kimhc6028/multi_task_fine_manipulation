@@ -11,7 +11,7 @@ Complementary Data Builder for the Multi-Task Fine Manipulation Dataset. This to
 
 ## Citation
 
-If you use our dataset in your research, please cite our arXiv paper:
+If you use our dataset in your research, please cite our paper:
 ```
 @inproceedings{kim2024multi,
   author = {Kim, Heecheol and Ohmura, Yoshiyuki and Kuniyoshi, Yasuo},
