@@ -7,21 +7,18 @@ import shutil
 import zipfile
 
 
-def unzip_files(video_dataset_path):
-    for root, dirs, files in os.walk(video_dataset_path):
+def unzip_files(zip_dataset_path, extract_dataset_path):
+    for root, dirs, files in os.walk(zip_dataset_path):
         for file in files:
             if file.endswith('.zip'):
                 zip_path = os.path.join(root, file)
-                extract_dir = os.path.splitext(zip_path)[0]
 
-                if not os.path.exists(extract_dir):
-                    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                        zip_ref.extractall(extract_dir)
-                        # Check and remove the __MACOSX folder if it exists
-                        macosx_path = os.path.join(extract_dir, '__MACOSX')
-                        if os.path.exists(macosx_path):
-                            shutil.rmtree(macosx_path)
-
+                with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                    zip_ref.extractall(extract_dataset_path)
+                    # Check and remove the __MACOSX folder if it exists
+                    macosx_path = os.path.join(extract_dataset_path, '__MACOSX')
+                    if os.path.exists(macosx_path):
+                        shutil.rmtree(macosx_path)
 
 
 def check_dataset_lengths(h5_file):
@@ -61,11 +58,11 @@ def process_video_to_h5(mp4_path, h5_file, left_key, right_key):
     return True
 
 
-def process_h5_files(video_dataset_path, h5_dataset_path):
-    unzip_files(video_dataset_path)
+def process_h5_files(zip_dataset_path, extract_dataset_path, h5_dataset_path):
+    unzip_files(zip_dataset_path, extract_dataset_path)
     h5_files = []
 
-    for root, dirs, files in os.walk(video_dataset_path):
+    for root, dirs, files in os.walk(extract_dataset_path):
         for file in files:
             if file.endswith('.h5'):
                 h5_files.append(os.path.join(root, file))
@@ -79,10 +76,9 @@ def process_h5_files(video_dataset_path, h5_dataset_path):
         foveated_mp4_path = os.path.join(os.path.dirname(h5_file_path), foveated_mp4_file)
 
         if os.path.exists(global_mp4_path) and os.path.exists(foveated_mp4_path):
-            relative_path = os.path.relpath(os.path.dirname(h5_file_path), video_dataset_path)
+            relative_path = os.path.relpath(os.path.dirname(h5_file_path), extract_dataset_path)
             dest_folder = os.path.join(h5_dataset_path, relative_path)
             os.makedirs(dest_folder, exist_ok=True)
-
             dest_h5_file_path = os.path.join(dest_folder, os.path.basename(h5_file_path))
 
             if os.path.exists(dest_h5_file_path):
@@ -95,6 +91,7 @@ def process_h5_files(video_dataset_path, h5_dataset_path):
                 if not check_dataset_lengths(h5_file):
                     print(f"Dataset length mismatch in file {h5_file_path}")
                     return
+                print(dest_h5_file_path)
 
                 with h5py.File(dest_h5_file_path, 'w') as new_h5_file:
                     global_length_result = process_video_to_h5(global_mp4_path, new_h5_file, 'left_global_img', 'right_global_img')
@@ -108,8 +105,9 @@ def process_h5_files(video_dataset_path, h5_dataset_path):
                         new_h5_file.create_dataset(key, data=h5_file[key], compression='lzf')
 
 
-video_dataset_path = 'downloaded_dataset'
+zip_dataset_path = 'downloaded_dataset'
+extract_dataset_path = 'extracted_dataset'
 h5_dataset_path = 'h5_dataset'
 
-process_h5_files(video_dataset_path, h5_dataset_path)
+process_h5_files(zip_dataset_path, extract_dataset_path, h5_dataset_path)
 
