@@ -3,7 +3,7 @@ Project Page: https://sites.google.com/view/multi-task-fine
 
 Paper: https://arxiv.org/abs/2401.07603
 
-Complementary Data Builder for the Multi-Task Fine Manipulation Dataset. This tool enhances the data available from the Multi-Task Fine Manipulation Dataset and is designed for use in conjunction with the dataset described in our accompanying paper. Additionally, it includes a feature to convert video data from MP4 format to HDF5 format, facilitating more efficient data handling and analysis
+Complementary Data Builder for the Multi-Task Fine Manipulation Dataset. This tool enhances the data available from the Multi-Task Fine Manipulation Dataset and is designed for use in conjunction with the dataset described in our accompanying paper. Additionally, it includes a feature to convert video data from MP4 format to HDF5 format, facilitating more efficient data handling and analysis.
 
 ## Usage
 1) Download the dataset from https://sites.google.com/view/multi-task-fine and place it under 'downloaded_dataset'.
@@ -38,6 +38,8 @@ The language description can be retrieved as a string using the following code s
 The term "length" in the dataset refers to the length of each episode, with the data frequency set at 5Hz.
 
 For calculating the forward kinematics of robot joint states, the Denavit-Hartenberg (DH) parameters for the UR5 robot can be utilized. Detailed DH parameters for UR5 are available in the [Universal Robots DH Parameters documentation](https://www.universal-robots.com/articles/ur/application-installation/dh-parameters-for-calculations-of-kinematics-and-dynamics/). For practical implementation, the [ikfastpy library on GitHub](https://github.com/andyzeng/ikfastpy) can be used to simplify this computation.
+
+You can build the robot used in this research by following [this document](https://docs.google.com/document/d/1T3YJK7IVRwcna9iGkYi1mRSvquYTrXzVz6xZdrMhdac/edit?usp=share_link).
 
 ## Citation
 
